@@ -12,3 +12,6 @@ class RegionService(GeneralService):
 
     def find_cities_by_index(self, region_id: str):
         return self._dao.find_cities_by_index(region_id)
+
+    def create_region_and_many_cities(self, region_name, cities_in_region: list):
+        return self._dao.create_region_and_many_cities(region_name, cities_in_region)

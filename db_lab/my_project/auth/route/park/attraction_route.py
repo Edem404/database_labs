@@ -8,6 +8,24 @@ from my_project.auth.domain import Attraction
 attraction_bp = Blueprint('attractions', __name__, url_prefix='/attractions')
 
 
+@attraction_bp.post('/<int:attraction_id>/add_staff')
+def add_car_to_order(attraction_id) -> Response:
+    staff_id = request.get_json().get('staff_id')
+
+    return make_response(jsonify(attraction_controller.add_staff_to_attraction(attraction_id, staff_id)), HTTPStatus.OK)
+
+
+@attraction_bp.get('/<int:attraction_id>/staff')
+def get_all_staff_in_attraction(attraction_id) -> Response:
+    return make_response(jsonify(attraction_controller.find_staff_in_attraction(attraction_id)), HTTPStatus.OK)
+
+
+@attraction_bp.delete('/<int:attraction_id>/delete_staff_from_attraction')
+def delete_staff_from_attraction(attraction_id) -> Response:
+    staff_id = request.get_json().get('staff_id')
+    return make_response(jsonify(attraction_controller.delete_staff_from_attraction(attraction_id, staff_id)), HTTPStatus.OK)
+
+
 @attraction_bp.get('')
 def get_all_attractions() -> Response:
     """
@@ -26,6 +44,9 @@ def create_attraction() -> Response:
     content = request.get_json()
     attraction = Attraction.create_from_dto(content)
     attraction_controller.create(attraction)
+    attraction_id = attraction.id
+    staff_id = content.get('staff_id')
+    attraction_controller.add_staff_to_attraction(attraction_id, staff_id)
     return make_response(jsonify(attraction.put_into_dto()), HTTPStatus.CREATED)
 
 

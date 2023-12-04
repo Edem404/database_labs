@@ -4,6 +4,14 @@ from typing import Dict, Any
 from my_project import db
 from my_project.auth.domain.i_dto import IDto
 
+attraction_has_staff = db.Table(
+    'attraction_has_staff',
+    db.Column('staff_id', db.Integer, db.ForeignKey('staff.id'), primary_key=True),
+    db.Column('attraction_id', db.Integer, db.ForeignKey('attraction.id'), primary_key=True),
+    db.UniqueConstraint('staff_id', 'attraction_id', name='uq_attraction_has_staff'),
+    extend_existing=True
+)
+
 
 class Attraction(db.Model, IDto):
     __tablename__ = 'attraction'
@@ -13,6 +21,8 @@ class Attraction(db.Model, IDto):
     capacity = db.Column(db.Integer, nullable=False)
     parks = db.relationship('Park', secondary='park_has_attraction', back_populates='attractions')
     attraction_staff = db.relationship('AttractionStaff', back_populates='attraction')
+
+    staff = db.relationship("Staff", secondary="attraction_has_staff", back_populates="attractions")
 
     def __repr__(self) -> str:
         return f"<Attraction(id={self.id}, name={self.name}, capacity={self.capacity})>"

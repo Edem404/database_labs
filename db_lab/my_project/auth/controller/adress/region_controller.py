@@ -10,3 +10,6 @@ class RegionController(GeneralController):
 
     def find_cities_by_index(self, region_id: str):
         return self._service.find_cities_by_index(region_id)
+
+    def create_region_and_many_cities(self, region_name, cities_in_region: list):
+        return self._service.create_region_and_many_cities(region_name, cities_in_region)

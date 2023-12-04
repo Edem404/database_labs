@@ -10,7 +10,8 @@ class Region(db.Model, IDto):
 
     name = db.Column(db.String(45), primary_key=True)
     cities = db.relationship('City', backref='region', lazy=True)
-    
+    cities_in_region = []
+
     def __repr__(self) -> str:
         return f"<Region(name={self.name})>"
 
@@ -21,6 +22,7 @@ class Region(db.Model, IDto):
         """
         return {
             "name": self.name,
+            "cities_in_region": self.cities_in_region
         }
 
     @staticmethod
@@ -30,5 +32,8 @@ class Region(db.Model, IDto):
         :param dto_dict: DTO object
         :return: Domain object
         """
-        obj = Region(name=dto_dict.get("name"))
+        obj = Region(
+            name=dto_dict.get("name"),
+            cities_in_region=dto_dict.get("cities_in_region")
+        )
         return obj

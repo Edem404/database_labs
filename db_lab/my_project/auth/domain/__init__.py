@@ -18,3 +18,4 @@ from my_project.auth.domain.park.attraction import Attraction
 from my_project.auth.domain.park.park_has_attraction import ParkHasAttraction
 from my_project.auth.domain.park.attraction_staff import AttractionStaff
 from my_project.auth.domain.orders.order_ticket import OrderTicket
+from my_project.auth.domain.park.staff import attraction_has_staff

@@ -16,8 +16,18 @@ def get_all_regions() -> Response:
     """
     return make_response(jsonify(region_controller.find_all()), HTTPStatus.OK)
 
+@region_bp.post('create_region_and_many_cities')
+def create_region_and_many_cities() -> Response:
+    content = request.get_json()
+    region = Region.create_from_dto(content)
+    region_name = region.name
+    cities = content.get("cities_in_region")
+    region_controller.create_region_and_many_cities(region_name, cities)
+    return make_response()
+
+
 @region_bp.post('')
-def create_client() -> Response:
+def create_region() -> Response:
     """
     Gets all objects from table using Service layer.
     :return: Response object
@@ -69,8 +79,8 @@ def delete_client(region_id: int) -> Response:
     region_controller.delete(region_id)
     return make_response("Region deleted", HTTPStatus.OK)
 
-@region_bp.get('/<string:region_id>/shops')
-def find_shops_by_index(region_id) -> Response:
+@region_bp.get('/<string:region_id>/citiess')
+def find_cities_by_index(region_id) -> Response:
     """
     Gets all objects from table using Service layer.
     :return: Response object

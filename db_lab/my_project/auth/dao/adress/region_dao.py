@@ -16,11 +16,20 @@ class RegionDAO(GeneralDAO):
         :param index: city index
         :return: list of shops
         """
-        # Отримати місто за індексом
+
         region = self._session.query(Region).filter(Region.name == index).first()
 
         if region:
-            # Отримати всі магазини, які мають city_id, яке відповідає індексу міста
             cities = self._session.query(City).filter(City.region_name == region.name).all()
             return [city.put_into_dto() for city in cities]
         return []
+
+    def create_region_and_many_cities(self, region_name, cities_in_region: list):
+        new_region = Region(name=region_name)
+        self._session.add(new_region)
+
+        for city_name in cities_in_region:
+            new_city = City(name=city_name, region_name=region_name)
+            self._session.add(new_city)
+
+        self._session.commit()

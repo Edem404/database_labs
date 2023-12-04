@@ -5,6 +5,15 @@ from my_project import db
 from my_project.auth.domain.i_dto import IDto
 
 
+attraction_has_staff = db.Table(
+    'attraction_has_staff',
+    db.Column('staff_id', db.Integer, db.ForeignKey('staff.id'), primary_key=True),
+    db.Column('attraction_id', db.Integer, db.ForeignKey('attraction.id'), primary_key=True),
+    db.UniqueConstraint('staff_id', 'attraction_id', name='uq_attraction_has_staff1'),
+    extend_existing=True
+)
+
+
 class Staff(db.Model, IDto):
     """
     Model declaration for Data Mapper.
@@ -17,6 +26,8 @@ class Staff(db.Model, IDto):
     phonenumber = db.Column(db.String(13), unique=True, nullable=True)
     park_id = db.Column(db.Integer, db.ForeignKey('park.id'), nullable=False)
     attraction_staff = db.relationship('AttractionStaff', back_populates='staff')
+
+    attractions = db.relationship("Attraction", secondary="attraction_has_staff", back_populates="staff")
 
     # Relationship 1:M
     # client_type_id = db.Column(db.Integer, db.ForeignKey('client_type.id'), nullable=True)
